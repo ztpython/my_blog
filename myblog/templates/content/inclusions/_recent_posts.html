@@ -1,0 +1,9 @@
+<ul>
+{% for post in recent_post_list %}
+  <li>
+    <a href="{% url 'content:detail' post.id %}">{{ post.title }}</a>
+  </li>
+{% empty %}
+  暂无文章！
+{% endfor %}
+</ul>

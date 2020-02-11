@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load blog_extras %}  {# 加载自定义模板标签实现展示最新文章,标签云等 #}
+{% load comment_extras %}  {# 自定义标签实现展示评论界面 #}
+{% load staticfiles %}
+{% block title %}文章详情页{% endblock title %}
+
+{% block body %}
+
+    <div class="content-body">
+        <div class="container">
+            <div class="row">
+            {% block main %}
+                <main class="col-md-8">
+
+                {% block article %}
+                    <article class="post post-1">
+                        <header class="entry-header">
+                            <h1 class="entry-title">{{ post.title }}</h1>
+                            <div class="entry-meta">
+                                <span class="post-category"><a href="{% url 'content:category' post.category_id %}">{{ post.category }}</a></span>
+                                <span class="post-date"><a href="{% url 'content:archive' post.create_time.year post.create_time.month post.create_time.day %}"><time class="entry-date"
+                                                                          datetime="2012-11-09T23:15:57+00:00">{{ post.create_time }}</time></a></span>
+                                <span class="post-author"><a href="#">{{ post.author }}</a></span>
+                                <span class="comments-link"><a href="#comment-area">{{ post.comment_set.count }} 评论</a></span>
+                                <span class="views-count"><a href="#">588 阅读</a></span>
+                            </div>
+                        </header>
+                        <div class="entry-content clearfix">
+                            <p>{{ post.body |safe}}</p>{# 关闭转义 #}
+                        </div>
+                    </article>
+                {% endblock article %}
+
+                {% block comment %}
+                    <section class="comment-area" id="comment-area">
+                        <hr>
+                        <h3>发表评论</h3>
+                        {% show_comment_form post %}
+                        <div class="comment-list-panel">
+                            {% show_comment post %}
+                        </div>
+                    </section>
+                {% endblock comment %}
+                </main>
+            {% endblock main %}
+
+            {% block aside %}
+                <aside class="col-md-4">
+                    <div class="widget widget-content">
+                        <h3 class="widget-title">文章目录</h3>
+                        <p>{{ post.toc|safe }}</p>
+                    </div>
+                    <div class="widget widget-recent-posts">
+                        <h3 class="widget-title">最新文章</h3>
+                        {# 自定义模板标签生成最新文章 #}
+                        {% show_recent_posts %}
+                    </div>
+                    <div class="widget widget-archives">
+                        <h3 class="widget-title">归档</h3>
+                        {# 自定义模板标签生成归档 #}
+                        {% show_date %}
+                    </div>
+
+                    <div class="widget widget-category">
+                        <h3 class="widget-title">分类</h3>
+                        {# 自定义模板标签实现分类 #}
+                        {% show_category %}
+                    </div>
+
+                    <div class="widget widget-tag-cloud">
+                        <h3 class="widget-title">标签云</h3>
+                        {# 自定义模板标签实现标签云 #}
+                        {% show_tags %}
+                    </div>
+                    <div class="rss">
+                        <a href=""><span class="ion-social-rss-outline"></span> RSS 订阅</a>
+                    </div>
+                </aside>
+            {% endblock aside %}
+            </div>
+        </div>
+    </div>
+
+
+{% endblock body %}
+
+<script src="js/script.js"></script>

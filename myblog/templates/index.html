@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% load blog_extras %}
+{% load staticfiles %}
+{% block title %}首页{% endblock title %}
+
+{% block body %}
+
+<div class="copyrights">Collect from <a href="http://www.cssmoban.com/">网页模板</a></div>
+<div class="copyrights">Modified by <a href="http://zmrenwu.com/">追梦人物的博客</a></div>
+
+<div class="content-body">
+    <div class="container">
+        <div class="row">
+        {% block main %}
+            <main class="col-md-8">
+                {# 文章 #}
+            {% block article %}
+                {% for content in contents_page %}
+                    <article class="post post-{{ forloop.counter }}">
+                        {# 文章标题 #}
+                        <header class="entry-header">
+                            <h1 class="entry-title">
+                                <a href="{% url 'content:detail' content.id %}">{{ content.title }}</a>
+                            </h1>
+                            <div class="entry-meta">
+                                <span class="post-category"><a href="#">{{ content.category }}</a></span>
+                                <span class="post-date"><a href="{% url 'content:archive' content.create_time.year content.create_time.month content.create_time.day %}"><time class="entry-date"
+                                                                          datetime="2012-11-09T23:15:57+00:00">{{ content.create_time }}</time></a></span>
+                                <span class="post-author"><a href="#">{{ content.author }}</a></span>
+                                <span class="comments-link"><a href="{% url 'content:detail' content.id %}#comment-area">{{ content.comment_set.count }} 评论</a></span>
+                                <span class="views-count"><a href="#">588 阅读</a></span>
+                            </div>
+                        </header>
+                        <div class="entry-content clearfix">
+                            <p>{{ content.excerpt }}</p>
+                            <div class="read-more cl-effect-14">
+                                <a href="{% url 'content:detail' content.id %}" class="more-link">继续阅读 <span class="meta-nav">→</span></a>
+                            </div>
+                        </div>
+                    </article>
+                {% endfor %}
+            {% endblock article %}
+
+            {% block paginate %}
+                <div class="pagination">
+                    {% if contents_page.has_previous %}
+                        <li><a href="{% url 'content:index' contents_page.previous_page_number %}">上一页</a></li>
+                    {% endif %}
+
+                    {% for pindex in pages %}
+                        {# 如果是当前页码,有额外效果 #}
+                        {% if pindex == contents_page.number %}
+                            <li class="current"><a href="{% url 'content:index' pindex %}">{{ pindex }}</a></li>
+                        {% else %}
+                            <li><a href="{% url 'content:index' pindex %}">{{ pindex }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if contents_page.has_next %}
+                        <li><a href="{% url 'content:index' contents_page.next_page_number %}">下一页</a></li>
+                    {% endif %}
+                </div>
+            {% endblock paginate %}
+
+            </main>
+        {% endblock main %}
+
+        {% block aside %}
+            {# 右侧内容 #}
+            <aside class="col-md-4">
+                <div class="widget widget-recent-posts">
+                    <h3 class="widget-title">最新文章</h3>
+                    {% show_recent_posts %}
+                </div>
+
+                <div class="widget widget-archives">
+                    <h3 class="widget-title">归档</h3>
+                    {% show_date %}
+                </div>
+
+                <div class="widget widget-category">
+                    <h3 class="widget-title">分类</h3>
+                    {% show_category %}
+                </div>
+
+                <div class="widget widget-tag-cloud">
+                    <h3 class="widget-title">标签云</h3>
+                    {% show_tags %}
+                </div>
+
+                <div class="rss">
+                    <a href=""><span class="ion-social-rss-outline"></span> RSS 订阅</a>
+                </div>
+            </aside>
+        {% endblock aside %}
+
+        </div>
+    </div>
+</div>
+
+
+
+<script src="{% static 'js/script.js' %}"></script>
+
+{% endblock body %}
+

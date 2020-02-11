@@ -1,0 +1,10 @@
+<ul>
+    {% for category in category_list %}
+    <li>
+        <a href="{% url 'content:category' category.id %}">{{ category.name }}</a>
+    </li>
+    {% empty %}
+    还没有分类
+    {% endfor %}
+
+</ul>

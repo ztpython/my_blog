@@ -1,0 +1,9 @@
+<ul>
+    {% for tag in tag_list %}
+    <li>
+        <a href="{% url 'content:tag' tag.id %}">{{ tag.name }}</a>
+    </li>
+    {% empty %}
+        还没有标签
+    {% endfor %}
+</ul>

@@ -1,0 +1,9 @@
+<ul>
+    {% for date in date_list %}
+    <li>
+        <a href="{% url 'content:archive' date.year date.month date.day %}">{{ date.year }} 年 {{ date.month }} 月{{ date.day }} 日</a>
+    </li>
+    {% empty %}
+    还没有归档数据
+    {% endfor %}
+</ul>

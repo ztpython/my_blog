@@ -1,0 +1,34 @@
+{% extends 'index.html' %}
+{% load blog_extras %}
+{% load staticfiles %}
+{% block title %}分类详情{% endblock title %}
+
+{% block article %}
+{# 文章 #}
+{% for content in post_list %}
+<article class="post post-{{ forloop.counter }}">
+    {# 文章标题 #}
+    <header class="entry-header">
+        <h1 class="entry-title">
+            <a href="{% url 'content:detail' content.id %}">{{ content.title }}</a>
+        </h1>
+        <div class="entry-meta">
+            <span class="post-category"><a href="#">{{ content.category }}</a></span>
+            <span class="post-date"><a href="{% url 'content:archive' content.create_time.year content.create_time.month content.create_time.day %}"><time class="entry-date"
+                                                      datetime="2012-11-09T23:15:57+00:00">{{ content.create_time }}</time></a></span>
+            <span class="post-author"><a href="#">{{ content.author }}</a></span>
+            <span class="comments-link"><a href="{% url 'content:detail' content.id %}#comment-area">4 评论</a></span>
+            <span class="views-count"><a href="#">588 阅读</a></span>
+        </div>
+    </header>
+    <div class="entry-content clearfix">
+        <p>{{ content.excerpt }}</p>
+        <div class="read-more cl-effect-14">
+            <a href="{% url 'content:detail' content.id %}" class="more-link">继续阅读 <span class="meta-nav">→</span></a>
+        </div>
+    </div>
+</article>
+{% endfor %}
+
+{% endblock article %}
+
